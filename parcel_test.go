@@ -51,18 +51,34 @@ func TestAddGetDelete(t *testing.T) {
 	// проверьте, что значения всех полей в полученном объекте совпадают со значениями полей в переменной parcel
 	res, err := store.Get(id)
 	require.NoError(t, err)
-	//require.Equal(t, err, parcel) было
+	//require.Equal(t, err, parcel) //было
 
-	require.NotEmpty(t, res) //рабочий вариант стало
-
+	//require.NotEmpty(t, res) //рабочий вариант стало
+	//require.Equal(t, res, parcel) //Исправлено пятое замечание
+	parcel.Number = id           //последне добавленное
+	assert.Equal(t, parcel, res) //последне добавленное
 	// delete
 	// удалите добавленную посылку, убедитесь в отсутствии ошибки
 	// проверьте, что посылку больше нельзя получить из БД
+
+	/*err = store.Delete(id)
+	if err != nil { // Исправлено шестое замечание
+		require.NoError(t, err)
+	}
+	require.NoError(t, err)*/
+
+	//res, err = store.Get(id) было
+	//if err != nil { //
+	//require.NoError(t, err)
+	//}
+	//require.Empty(t, res) //последнее добавленное
+	//require.Error(t, err)
+
+	//последне добавленное. Исправлено шестое замечание
 	err = store.Delete(id)
 	require.NoError(t, err)
-	res, err = store.Get(id)
-	require.Empty(t, res)
-
+	_, err = store.Get(id)
+	require.ErrorIs(t, sql.ErrNoRows, err)
 }
 
 // TestSetAddress проверяет обновление адреса
@@ -121,7 +137,8 @@ func TestSetStatus(t *testing.T) {
 	res, err := store.Get(id)
 	require.NoError(t, err)
 
-	require.Equal(t, res.Status, ParcelStatusSent)
+	//require.Equal(t, res.Status, ParcelStatusSent)
+	require.Equal(t, ParcelStatusSent, res.Status) // исправлено седьмое замечание
 }
 
 // TestGetByClient проверяет получение посылок по идентификатору клиента
@@ -173,11 +190,12 @@ func TestGetByClient(t *testing.T) {
 		// убедитесь, что все посылки из storedParcels есть в parcelMap
 		// убедитесь, что значения полей полученных посылок заполнены верно
 
-		parcels := parcelMap[parcel.Number]
-		assert.NotEqual(t, 0, parcels)
-		assert.Equal(t, parcels.Number, parcel.Number)
-		assert.Equal(t, parcels.Client, parcel.Client)
-		assert.Equal(t, parcels.Status, parcel.Status)
-		assert.Equal(t, parcels.CreatedAt, parcel.CreatedAt)
+		//parcels := parcelMap[parcel.Number]
+		//assert.NotEqual(t, 0, parcels)
+		//assert.Equal(t, parcels.Number, parcel.Number)
+		//assert.Equal(t, parcels.Client, parcel.Client)
+		//assert.Equal(t, parcels.Status, parcel.Status)
+		//assert.Equal(t, parcels.CreatedAt, parcel.CreatedAt)
+		require.Equal(t, parcel, parcelMap[parcel.Number])
 	}
 }

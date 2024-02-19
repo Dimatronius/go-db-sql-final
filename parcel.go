@@ -18,7 +18,7 @@ func (s ParcelStore) Add(p Parcel) (int, error) {
 	res, err := s.db.Exec("insert into parcel (client, status, address, created_at) values (:client,:status, :address, :created_at)",
 		sql.Named("client", p.Client),
 		sql.Named("status", p.Status),
-		sql.Named("address", p.Status),
+		sql.Named("address", p.Address), //Испавлено второе замечание
 		sql.Named("created_at", p.CreatedAt))
 
 	if err != nil {
@@ -59,7 +59,7 @@ func (s ParcelStore) GetByClient(client int) ([]Parcel, error) {
 		sql.Named("client", client))
 
 	if err != nil {
-		return res, err
+		return nil, err // //Испавлено третье замечание
 	}
 	defer rows.Close()
 
@@ -68,9 +68,14 @@ func (s ParcelStore) GetByClient(client int) ([]Parcel, error) {
 
 		err := rows.Scan(&p.Number, &p.Client, &p.Status, &p.Address, &p.CreatedAt)
 		if err != nil {
-			return res, err
+			return nil, err
 		}
 		res = append(res, p)
+
+	}
+
+	if err := rows.Err(); err != nil { // исправление 4
+		return nil, err
 	}
 
 	return res, nil
