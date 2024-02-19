@@ -173,15 +173,6 @@ func TestGetByClient(t *testing.T) {
 		// убедитесь, что все посылки из storedParcels есть в parcelMap
 		// убедитесь, что значения полей полученных посылок заполнены верно
 
-		//value, ok := parcelMap[parcel.Number] //было
-		//_, ok := parcelMap[parcel.Number] //попытка 2
-		//require.True(t, ok)
-
-		//require.Equal(t, value, parcel) //было но ошибка
-
-		//require.Equal(t, parcelMap[parcel.Number], parcel) попытка 2
-
-		//assert.Equal(t, parcelMap[parcel.Number], parcel) попытка 3
 		parcels := parcelMap[parcel.Number]
 		assert.NotEqual(t, 0, parcels)
 		assert.Equal(t, parcels.Number, parcel.Number)
