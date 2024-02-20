@@ -173,9 +173,7 @@ func TestGetByClient(t *testing.T) {
 		// убедитесь, что все посылки из storedParcels есть в parcelMap
 		// убедитесь, что значения полей полученных посылок заполнены верно
 
-		//require.Equal(t, parcel, parcelMap[parcel.Number]) было
 		_, ok := parcelMap[parcel.Number]
 		require.True(t, ok)
-
 	}
 }
