@@ -175,5 +175,6 @@ func TestGetByClient(t *testing.T) {
 
 		_, ok := parcelMap[parcel.Number]
 		require.True(t, ok)
+		require.Equal(t, parcel, parcelMap[parcel.Number])
 	}
 }
